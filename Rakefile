@@ -163,6 +163,8 @@ end
 
 require 'rake/extensiontask'
 require 'rake/testtask'
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
 
 Rake::ExtensionTask.new('RMagick2') do |ext|
   ext.ext_dir = 'ext/RMagick'
@@ -173,11 +175,12 @@ Rake::TestTask.new(:test) do |t|
 end
 
 task :test => :compile
+task :spec => :compile
 
 if ENV['STYLE_CHECKS']
   require 'rubocop/rake_task'
   RuboCop::RakeTask.new
-  task :default => [:test, :rubocop]
+  task :default => [:spec, :test, :rubocop]
 else
-  task :default => :test
+  task :default => [:spec, :test]
 end
